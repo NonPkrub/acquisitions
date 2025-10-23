@@ -1,0 +1,44 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build output / temporary files
+dist/
+build/
+.tmp/
+.cache/
+
+# Drizzle migration artifacts
+drizzle/meta/
+drizzle/*.sql
+
+# Local databases or backups
+*.sqlite
+*.db
+*.bak
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE / editor settings
+.vscode/
+.idea/
+
+# NPM / Yarn lockfiles (เลือกเก็บไว้ได้ แต่ถ้าไม่อยากให้ sync ก็ ignore)
+# package-lock.json
+# yarn.lock
+
+# Optional: test coverage
+coverage/
+
+# Optional: Docker
+docker-compose.override.yml
