@@ -1,0 +1,48 @@
+services:
+  # Neon Local proxy service
+  neon-local:
+    image: neondatabase/neon_local:latest
+    container_name: acquisitions-neon-local
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env.development
+    volumes:
+      # Optional: Uncomment for persistent branches per Git branch
+       - ./.neon_local/:/tmp/.neon_local
+       - ./.git/HEAD:/tmp/.git/HEAD:ro,consistent
+    networks:
+      - acquisitions-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "localhost", "-p", "5432", "-U", "neon"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  # Application service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: acquisitions-app-dev
+    ports:
+      - "${PORT:-3000}:3000"
+    env_file:
+      - .env.development
+    volumes:
+      # Mount source code for hot reload
+      - .:/app
+      - /app/node_modules
+      - ./log:/app/log
+    depends_on:
+      neon-local:
+        condition: service_healthy
+    networks:
+      - acquisitions-network
+    restart: unless-stopped
+
+networks:
+  acquisitions-network:
+    driver: bridge

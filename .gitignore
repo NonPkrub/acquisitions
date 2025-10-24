@@ -9,6 +9,8 @@ logs/
 .env
 .env.local
 .env.*.local
+.env.development
+.env.production
 
 # Build output / temporary files
 dist/
@@ -40,5 +42,12 @@ Thumbs.db
 # Optional: test coverage
 coverage/
 
-# Optional: Docker
+# Docker
 docker-compose.override.yml
+.neon_local/
+*.env.backup
+
+# Docker build artifacts
+
+# SSL certificates (if using in nginx)
+nginx/ssl/
