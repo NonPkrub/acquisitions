@@ -33,11 +33,12 @@ Copy the template files and update with your actual values:
 # Copy development environment template
 cp .env.development .env.development.local
 
-# Copy production environment template  
+# Copy production environment template
 cp .env.production .env.production.local
 ```
 
 Update `.env.development.local`:
+
 ```env
 NEON_API_KEY=your_actual_neon_api_key
 NEON_PROJECT_ID=your_actual_project_id
@@ -45,6 +46,7 @@ PARENT_BRANCH_ID=your_actual_parent_branch_id
 ```
 
 Update `.env.production.local`:
+
 ```env
 DATABASE_URL=postgres://your-username:your-password@ep-xxxxx-xxxxx.your-region.aws.neon.tech/your-database?sslmode=require
 ```
@@ -67,7 +69,7 @@ docker-compose -f docker-compose.dev.yml down
 ### What happens in development:
 
 1. **Neon Local proxy** starts and creates an ephemeral branch
-2. **Application** connects to `neon-local:5432` 
+2. **Application** connects to `neon-local:5432`
 3. **Hot reload** enabled for code changes
 4. **Fresh database** on each restart (ephemeral branches)
 
@@ -107,7 +109,6 @@ docker-compose -f docker-compose.prod.yml up -d --scale app=3
 - **Optimized Docker images** with multi-stage builds
 - **Health checks** for application reliability
 - **Resource limits** for stable performance
-- **Nginx reverse proxy** with security headers
 - **Direct connection** to Neon Cloud Database
 
 ### Production Commands
@@ -127,10 +128,10 @@ curl http://localhost/health
 
 The key difference between environments is the `DATABASE_URL`:
 
-| Environment | Database Connection |
-|-------------|-------------------|
-| Development | `postgres://neon:npg@neon-local:5432/main?sslmode=require` |
-| Production | `postgres://user:pass@ep-xxxxx.neon.tech/db?sslmode=require` |
+| Environment | Database Connection                                          |
+| ----------- | ------------------------------------------------------------ |
+| Development | `postgres://neon:npg@neon-local:5432/main?sslmode=require`   |
+| Production  | `postgres://user:pass@ep-xxxxx.neon.tech/db?sslmode=require` |
 
 ## 📂 File Structure
 
@@ -141,8 +142,6 @@ acquisitions/
 ├── Dockerfile                  # Multi-stage Docker build
 ├── .env.development           # Development environment template
 ├── .env.production            # Production environment template
-├── nginx/
-│   └── nginx.conf             # Production reverse proxy config
 └── src/                       # Application source code
 ```
 
@@ -176,19 +175,21 @@ docker-compose -f docker-compose.prod.yml exec app npm run db:migrate
 ### Common Issues
 
 1. **Neon Local connection fails**
+
    ```bash
    # Check if Neon Local is healthy
    docker-compose -f docker-compose.dev.yml exec neon-local pg_isready -U neon
-   
+
    # Verify environment variables
    docker-compose -f docker-compose.dev.yml exec neon-local env | grep NEON
    ```
 
 2. **Application can't connect to database**
+
    ```bash
    # Check network connectivity
    docker-compose -f docker-compose.dev.yml exec app ping neon-local
-   
+
    # Verify DATABASE_URL
    docker-compose -f docker-compose.dev.yml exec app env | grep DATABASE_URL
    ```
@@ -222,15 +223,16 @@ docker-compose -f docker-compose.dev.yml exec app sh
 ## 📈 Performance Optimization
 
 ### Development
+
 - Use volume mounts for hot reload
 - Ephemeral branches reduce database overhead
 - Development dependencies included
 
 ### Production
+
 - Optimized multi-stage builds
 - Resource limits configured
 - Health checks enabled
-- Nginx caching and compression
 
 ## 🔒 Security Considerations
 

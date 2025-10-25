@@ -7,20 +7,16 @@ const securityMiddleware = async (req, res, next) => {
     const role = req.user?.role || 'guest';
 
     let limit;
-    let message;
 
     switch (role) {
       case 'admin':
         limit = 20;
-        message = 'Admin request limit exceeded (20 per minute). Slow down!';
         break;
       case 'user':
         limit = 10;
-        message = 'User request limit exceeded (10 per minute). Slow down!';
         break;
       default:
         limit = 5;
-        message = 'Request limit exceeded (5 per minute). Slow down!';
         break;
     }
 
@@ -36,7 +32,7 @@ const securityMiddleware = async (req, res, next) => {
     const decision = await client.protect(req);
 
     if (decision.isDenied() && decision.reason.isBot()) {
-      logger.warm(`Bot request blocked`, {
+      logger.warm('Bot request blocked', {
         ip: req.ip,
         userAgent: req.get('User-agent'),
         path: req.path,
@@ -49,7 +45,7 @@ const securityMiddleware = async (req, res, next) => {
     }
 
     if (decision.isDenied() && decision.reason.isShield()) {
-      logger.warm(`Shield Blocked request `, {
+      logger.warm('Shield Blocked request ', {
         ip: req.ip,
         userAgent: req.get('User-agent'),
         path: req.path,
@@ -63,7 +59,7 @@ const securityMiddleware = async (req, res, next) => {
     }
 
     if (decision.isDenied() && decision.reason.isRateLimit()) {
-      logger.warm(`Shield Blocked request `, {
+      logger.warm('Shield Blocked request ', {
         ip: req.ip,
         userAgent: req.get('User-agent'),
         path: req.path,

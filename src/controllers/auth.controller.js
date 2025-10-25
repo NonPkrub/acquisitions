@@ -32,7 +32,7 @@ export const signup = async (req, res, next) => {
     res.status(201).json({
       message: 'User registered successfully',
       user: {
-        id: user.id, 
+        id: user.id,
         name: user.name,
         email: user.email,
         role: user.role,

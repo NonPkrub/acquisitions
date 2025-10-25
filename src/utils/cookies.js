@@ -10,11 +10,11 @@ export const cookies = {
     res.cookie(name, value, { ...cookies.getOption(), ...options });
   },
 
-  clear: (res, name, options ={}) => {
+  clear: (res, name, options = {}) => {
     res.clearCookie(name, { ...cookies.getOption(), ...options });
-  },    
+  },
 
-  get:(req,name) =>{
+  get: (req, name) => {
     return req.cookies[name];
-  }
+  },
 };
